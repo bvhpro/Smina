@@ -1,0 +1,58 @@
+QUERY LẤY DỮ LIỆU
+
+Database dùng sqlite gồm 1 bảng posts duy nhất với các trường:
+- ID
+  lesson_ID
+  sort_order
+  txt_audio_name
+  txt_title
+  txt_hira_kun
+  txt_kata_on
+  txt_kanji
+  txt_content
+  txt_note
+  type
+    //c - chữ cái
+    //w - từ vựng
+    //s - ngữ pháp
+    //l - bài học
+    //kj - kanji
+    //kw - kaiwa
+  is_favour
+  level
+  time_added
+
+1. Màn hình home
+- none
+
+2. Màn hình bảng chữ cái
+select ID,sort_order,txt_audio_name,txt_title,txt_hira_kun,txt_kata_on,txt_note from posts where type = 'c' order by sort_order
+
+3. Màn hình danh sách bài học
+select ID,sort_order,txt_title from posts where type = 'l' and level = [?] order by sort_order
+
+4. Màn hình danh sách từ mới
+select * from posts where type = 'w' and lesson_ID = [?] order by sort_order
+
+4.1. Màn hình danh sách từ mới yêu thích
+select * from posts where type = 'w' and is_favour = 1 order by time_added DESC
+
+5. Màn hình ngữ pháp của bài học
+select txt_note,txt_content from posts where type = 's' and lesson_ID = [?]
+
+6. Kaiwa của bài học
+select txt_title,txt_audio_name,txt_content from posts where type = 'kw' and lesson_ID = [?]
+
+7. Màn hình Kanji của bài
+select txt_kanji,txt_hira_kun,txt_kata_on,txt_content from posts where type = 'kj' and lesson_ID = [?] order by sort_order
+
+8. Màn hình search
+select * from posts where type = 'w' and txt_title like %[?]% union
+select * from posts where type = 'w' and txt_hira_kun like %[?]% union
+select * from posts where type = 'w' and txt_kanji like %[?]%
+
+9. Màn hình test từ mới của bài
+- Lấy toàn bộ từ mới của bài: select * from posts where type = 'w' and lesson_ID = [?] order by rand
+- Với danh sách từ mới trả về, chia thành các mảng gồm các phần tử chứa từ mới muốn test và 4 từ khác lấy random
+
+

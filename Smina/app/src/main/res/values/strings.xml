@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">Smina</string>
+    <string name="scrName_search_result">Kết quả tìm kiếm</string>
+    <string name="scrName_favour_word">Đánh dấu</string>
+
+    <string name="hello_world">Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world!</string>
+    <string name="action_settings">Cài đặt</string>
+
+    <!-->home<-->
+    <string name="txt_find_word_hint">Tìm từ mới...</string>
+    <string name="txt_search_btn">Tìm</string>
+    <string name="txt_bangchucai">Bảng chữ cái</string>
+    <string name="txt_n5">Trình độ N5</string>
+    <string name="txt_n4">Trình độ N4</string>
+    <!-->bảng chữ cái<-->
+    <!-->danh sách bài học<-->
+
+    <!-->từ vựng<-->
+    <string name="txt_tuvung">Từ vựng</string>
+    <string name="txt_kanji">Kanji</string>
+    <string name="txt_nguphap">Ngữ pháp</string>
+    <string name="txt_kaiwa">Kaiwa</string>
+
+    <!-->từ yêu thích<-->
+    <string name="txt_word_favour">Từ yêu thích</string>
+
+    <!-->ngữ pháp<-->
+    <!-->kaiwa<-->
+    <!-->kanji<-->
+    <!-->kết quả tìm kiếm<-->
+
+    <!-->test từ mới<-->
+    <string name="txt_test_new_word">Kiểm tra từ mới</string>
+    <string name="txt_ketthuc">Kết thúc</string>
+    <string name="txt_point">Điểm:</string>
+    <string name="txt_boqua">Bỏ qua</string>
+    <string name="txt_next">Tiếp</string>
+
+    <!-->kết quả test từ mới<-->
+    <string name="txt_perfect">Bạn đã thuộc bài rồi dấy! :)</string>
+    <string name="txt_good">Bạn làm rất tốt, cố gắng phát huy nhé!</string>
+    <string name="txt_poor">Hãy cố gắng lần sau nhé! :)</string>
+
+    <string name="txt_start">Bắt đầu</string>
+    <string name="txt_start_again">Thử lại</string>
+
+    <string name="txt_clear_screen">Clear Screen</string>
+
+    <string name="txt_btn_menu">Menu 1</string>
+
+    <!--string name=""></string>
+
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string-->
+
+    <string name="txt_url_logo">\res\drawable\logo.png</string>
+
+    <string-array name="list_value">
+        <item>value 1</item>
+        <item>value 2</item>
+        <item>value 3</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,80 @@
+PHÁC THẢO APP HỌC TIẾNG NHẬT
+
+I. Các màn hình chính
+- Màn hình home
+- Màn hình chức năng:
++ Màn hình bảng chữ cái
++ Danh sách bài học
++ Danh sách từ mới
++ Ngữ pháp của baì
++ Kaiwa của bài
++ Kanji theo bài
++ Danh sách từ mới yêu thích
++ Test từ mới của bài
++ Màn hình search
+
+IB. Các đối tượng phân tách quản lý
+- Bài học (l)
+- Từ mới của 1 bài học cụ thể (w)
+- Từ mới yêu thích
+- Ngữ pháp của 1 bài học cụ thể (g)
+- Chữ cái (c)
+
+II. Màn hình chi tiết
+1. Màn hình home
+- Sẽ có các button chọn trình độ (N5, N4,...), input search từ mới, thông tin
+
+2. Màn hình bảng chữ cái
+- Hiển thị bảng chữ cái gồm cả hiragana, katakana và romaji
+- Khi click vào chữ cái, sẽ phóng to hình của chữ, và phát âm chữ đó
+
+3. Màn hình danh sách bài học
+- Ứng với mỗi trình độ, sẽ có danh sách các bài học tương ứng, bao gồm các button, mỗi button sẽ chỉ đến 1 bài học tương ứng
+
+4. Màn hình danh sách từ mới
+- Sau khi click chọn bài học ở màn hình 3, sẽ hiển thị màn hình danh sách từ mới
+- Trong danh sách từ mới, các từ sẽ được hiển thị theo dạng list, với các thông tin như sau:
++ Từ mới bằng hiragana, bên cạnh là thông tin nhóm của động từ (nếu từ đó là động từ)
++ Từ mới bằng Kanji
++ Nghĩa của từ
++ Note được tạo ra với từ đó
++ Button cho phép thêm từ đó vào danh sách yêu thích
+- Khi click vào 1 từ mới bất kì thì sẽ phát ra âm thanh phát âm từ đó
+
+4.1. Màn hình danh sách từ mới yêu thích
+- Hiển thị list từ mới được thêm vào danh sách yêu thích
+- Màn hình này sẽ không có các button được nêu trong mục 10
+
+5. Màn hình ngữ pháp của bài học
+- Hiển thị thông tin ngữ pháp của bài học đó
+
+6. Kaiwa của bài học
+- Hiển thị thông tin bài kaiwa của bài học
+- Gồm có 2 phần:
++ Transcript của bài kaiwa
++ Play control của audio
+
+7. Màn hình Kanji của bài
+- Hiển thị list các chữ kanji theo unit với các thông tin: chữ kanji, nghĩa Hán Việt, âm On, âm kun, từ ví dụ
+- Có icon thông tin, khi click vào sẽ hiển thị danh sách các từ có dùng chữ đó trong từng trình độ
+
+8. Màn hình search
+- Để thực hiện chức năng search từ mới
+- Có thể search theo hiragana, Kanji, nghĩa của từ
+- Nếu tồn tại kết quả search, thì thông tin từ cần tìm sẽ hiển thị theo dạng list như màn hình list, thêm thông tin từ đó thuộc bài số bao nhiêu
+- Trong màn hình search sẽ có thêm searchbox để người dùng có thể tìm kiếm từ khác
+
+9. Màn hình test từ mới của bài
+- Mỗi bài học sẽ có 1 bài test từ mới
+- Từ mới sẽ được lấy random thứ tự trong bài học, sẽ gồm nghĩa và Kanji và 1 input để người học nhập cách đọc vào, đúng thì đi tiếp, sai thì báo sai
+- Có tùy chọn bỏ qua
+- Kết quả test sẽ hiển thị khi hết từ trong bài, có button để quay lại danh sách từ mới của bài học và button để test lại
+
+10. Phần chung của tất cả các màn hình
+- Button để show ra menu
+- Input để tìm kiếm từ mới
+- Màn hình 4,5,6,7 có thêm các button để chuyển nhanh sang các màn hình kia, mũi tên để chuyển tiếp sang bài tiếp theo hoặc trước đó
+
+III. Road map
+- Đặt tên app là Smina
+- Hiện tại sẽ thực hiện trình độ N5, N4, sau này có time sẽ bổ sung các level cao hơn :D
