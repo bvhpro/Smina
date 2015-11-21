@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -50,10 +51,15 @@ public class AppModel extends Common {
     }
 
     public void buildTheListRowWord(final Cursor data, RelativeLayout MainContent){
+        addTabOfLesson(MainContent);
+
+        RelativeLayout Parent_of_ContentOfList = new RelativeLayout(this);
+        RelativeLayout.LayoutParams Parent_of_ContentOfList_Pr = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Parent_of_ContentOfList_Pr.addRule(RelativeLayout.BELOW,Utils.TAB_OF_LESSON_ID);
+
         LinearLayout ContentOfList = new LinearLayout(this);
         LinearLayout.LayoutParams lop = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ContentOfList.setOrientation(LinearLayout.VERTICAL);
-
         ContentOfList.setPadding(10, 10, 10, 10);
 
         try{
@@ -61,14 +67,11 @@ public class AppModel extends Common {
                 do {
                     RelativeLayout row = new RelativeLayout(this);
                     row.setBackgroundColor(getResources().getColor(R.color.AntiqueWhite));
-                    LinearLayout.LayoutParams rowParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                    //row.setPadding(10,20,10,20);
+                    RelativeLayout.LayoutParams rowParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                     TextView tv = new TextView(this);
                     final String audio_name = data.getString(3);
                     tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
-                    tv.setId(data.getInt(0));
                     tv.setLineSpacing((float) 0, (float) 1.50);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -87,7 +90,7 @@ public class AppModel extends Common {
                     Button addNoteBtn = new Button(this);
                     addNoteBtn.setText("Add Note");
                     addNoteBtn.setId(11111);
-                    addNoteBtn.setPadding(10,0,10,0);
+                    addNoteBtn.setPadding(10, 0, 10, 0);
                     RelativeLayout.LayoutParams addNoteBtnParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     addNoteBtn.setBackgroundColor(getResources().getColor(R.color.AliceBlue));
                     addNoteBtnParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -101,15 +104,15 @@ public class AppModel extends Common {
                     addFovourBtn.setBackgroundColor(getResources().getColor(R.color.AliceBlue));
                     btnParam.addRule(RelativeLayout.LEFT_OF, addNoteBtn.getId());
                     btnParam.addRule(RelativeLayout.CENTER_VERTICAL);
-                    btnParam.setMargins(0,0,10,0);
+                    btnParam.setMargins(0, 0, 10, 0);
                     row.addView(addFovourBtn, btnParam);
 
-                    ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
+                   /* ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
                     Paint paint = rectShapeDrawable.getPaint();
                     paint.setColor(Color.GRAY);
                     paint.setStyle(Paint.Style.STROKE);
                     paint.setStrokeWidth(2); // you can change the value of 5
-                    row.setBackgroundDrawable(rectShapeDrawable);
+                    row.setBackgroundDrawable(rectShapeDrawable);*/
 
                     rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
                     ContentOfList.addView(row,rowParam);
@@ -122,10 +125,165 @@ public class AppModel extends Common {
         catch (Exception e) {
             Log.v("Co loi xay ra", e.toString());
         }
-        MainContent.addView(ContentOfList, lop);
-
+        Parent_of_ContentOfList.addView(ContentOfList, lop);
+        MainContent.addView(Parent_of_ContentOfList, Parent_of_ContentOfList_Pr);
     }
 
+    public void buildTheListGramar(final Cursor data, RelativeLayout MainContent){
+        addTabOfLesson(MainContent);
+
+        RelativeLayout Parent_of_ContentOfList = new RelativeLayout(this);
+        RelativeLayout.LayoutParams Parent_of_ContentOfList_Pr = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Parent_of_ContentOfList_Pr.addRule(RelativeLayout.BELOW,Utils.TAB_OF_LESSON_ID);
+
+        LinearLayout ContentOfList = new LinearLayout(this);
+        LinearLayout.LayoutParams lop = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ContentOfList.setOrientation(LinearLayout.VERTICAL);
+        ContentOfList.setPadding(10, 10, 10, 10);
+
+        try{
+            if(data.moveToFirst()){
+                do {
+                    RelativeLayout row = new RelativeLayout(this);
+                    row.setBackgroundColor(getResources().getColor(R.color.AntiqueWhite));
+                    RelativeLayout.LayoutParams rowParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    TextView tv = new TextView(this);
+                    final String audio_name = data.getString(3);
+                    tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
+                    tv.setLineSpacing((float) 0, (float) 1.50);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new PlaySoundBackgroundTask().execute("audio/" + audio_name + ".mp3");
+                        }
+                    });
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.addRule(RelativeLayout.ALIGN_LEFT);
+                    lp.addRule(RelativeLayout.CENTER_VERTICAL);
+                    tv.setPadding(10, 10, 10, 10);
+                    tv.setBackgroundColor(getResources().getColor(R.color.Lavender));
+                    row.addView(tv, lp);
+                    lp = null;
+
+                    rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
+                    ContentOfList.addView(row,rowParam);
+                    rowParam = null;
+                }
+                while (data.moveToNext());
+
+            }
+        }
+        catch (Exception e) {
+            Log.v("Co loi xay ra", e.toString());
+        }
+        Parent_of_ContentOfList.addView(ContentOfList, lop);
+        MainContent.addView(Parent_of_ContentOfList, Parent_of_ContentOfList_Pr);
+    }
+
+    public void buildTheListKanji(final Cursor data, RelativeLayout MainContent){
+        addTabOfLesson(MainContent);
+
+        RelativeLayout Parent_of_ContentOfList = new RelativeLayout(this);
+        RelativeLayout.LayoutParams Parent_of_ContentOfList_Pr = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Parent_of_ContentOfList_Pr.addRule(RelativeLayout.BELOW,Utils.TAB_OF_LESSON_ID);
+
+        LinearLayout ContentOfList = new LinearLayout(this);
+        LinearLayout.LayoutParams lop = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ContentOfList.setOrientation(LinearLayout.VERTICAL);
+        ContentOfList.setPadding(10, 10, 10, 10);
+
+        try{
+            if(data.moveToFirst()){
+                do {
+                    RelativeLayout row = new RelativeLayout(this);
+                    row.setBackgroundColor(getResources().getColor(R.color.AntiqueWhite));
+                    RelativeLayout.LayoutParams rowParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    TextView tv = new TextView(this);
+                    final String audio_name = data.getString(3);
+                    tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
+                    tv.setLineSpacing((float) 0, (float) 1.50);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new PlaySoundBackgroundTask().execute("audio/" + audio_name + ".mp3");
+                        }
+                    });
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.addRule(RelativeLayout.ALIGN_LEFT);
+                    lp.addRule(RelativeLayout.CENTER_VERTICAL);
+                    tv.setPadding(10, 10, 10, 10);
+                    tv.setBackgroundColor(getResources().getColor(R.color.Lavender));
+                    row.addView(tv, lp);
+                    lp = null;
+
+                    rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
+                    ContentOfList.addView(row,rowParam);
+                    rowParam = null;
+                }
+                while (data.moveToNext());
+
+            }
+        }
+        catch (Exception e) {
+            Log.v("Co loi xay ra", e.toString());
+        }
+        Parent_of_ContentOfList.addView(ContentOfList, lop);
+        MainContent.addView(Parent_of_ContentOfList, Parent_of_ContentOfList_Pr);
+    }
+
+    public void buildTheListKaiwa(final Cursor data, RelativeLayout MainContent){
+        addTabOfLesson(MainContent);
+
+        RelativeLayout Parent_of_ContentOfList = new RelativeLayout(this);
+        RelativeLayout.LayoutParams Parent_of_ContentOfList_Pr = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Parent_of_ContentOfList_Pr.addRule(RelativeLayout.BELOW,Utils.TAB_OF_LESSON_ID);
+
+        LinearLayout ContentOfList = new LinearLayout(this);
+        LinearLayout.LayoutParams lop = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ContentOfList.setOrientation(LinearLayout.VERTICAL);
+        ContentOfList.setPadding(10, 10, 10, 10);
+
+        try{
+            if(data.moveToFirst()){
+                do {
+                    RelativeLayout row = new RelativeLayout(this);
+                    row.setBackgroundColor(getResources().getColor(R.color.AntiqueWhite));
+                    RelativeLayout.LayoutParams rowParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    TextView tv = new TextView(this);
+                    final String audio_name = data.getString(3);
+                    tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
+                    tv.setLineSpacing((float) 0, (float) 1.50);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new PlaySoundBackgroundTask().execute("audio/" + audio_name + ".mp3");
+                        }
+                    });
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.addRule(RelativeLayout.ALIGN_LEFT);
+                    lp.addRule(RelativeLayout.CENTER_VERTICAL);
+                    tv.setPadding(10, 10, 10, 10);
+                    tv.setBackgroundColor(getResources().getColor(R.color.Lavender));
+                    row.addView(tv, lp);
+                    lp = null;
+
+                    rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
+                    ContentOfList.addView(row,rowParam);
+                    rowParam = null;
+                }
+                while (data.moveToNext());
+
+            }
+        }
+        catch (Exception e) {
+            Log.v("Co loi xay ra", e.toString());
+        }
+        Parent_of_ContentOfList.addView(ContentOfList, lop);
+        MainContent.addView(Parent_of_ContentOfList, Parent_of_ContentOfList_Pr);
+    }
 
     public void buildTheListLesson(final Cursor data, final RelativeLayout MainContent){
         GridLayout ContentOfList = new GridLayout(this);
@@ -147,6 +305,7 @@ public class AppModel extends Common {
                         @Override
                         public void onClick(View v) {
                             MainContent.removeAllViews();
+                            Utils.LESSON_NUMBER_ID = lessonID;
                             String[] sTerm = {"", "" + lessonID, "1"};
                             genView(MainContent, "new_word", sTerm);
                         }
@@ -220,6 +379,103 @@ public class AppModel extends Common {
 
     }
 
+    public void addTabOfLesson(final RelativeLayout MainContent){
+        RelativeLayout tabGroup = new RelativeLayout(this);
+        tabGroup.setId(Utils.TAB_OF_LESSON_ID);
+
+        RelativeLayout.LayoutParams tabGroupParam = new  RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tabGroupParam.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+
+        Button btn_kanJi = new Button(this);
+        btn_kanJi.setText(getResources().getString(R.string.txt_kanji));
+        btn_kanJi.setId(314);
+
+        btn_kanJi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainContent.removeAllViews();
+                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "7"};
+                genView(MainContent, "kanJi", sTerm);
+            }
+        });
+        RelativeLayout.LayoutParams btn_kanJiPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn_kanJiPR.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        tabGroup.addView(btn_kanJi, btn_kanJiPR);
+
+        Button btn_kaiWa = new Button(this);
+        btn_kaiWa.setText(getResources().getString(R.string.txt_kaiwa));
+        btn_kaiWa.setId(313);
+
+        btn_kaiWa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainContent.removeAllViews();
+                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "8"};
+                genView(MainContent, "kaiWa", sTerm);
+            }
+        });
+
+        RelativeLayout.LayoutParams btn_kaiWaPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn_kaiWaPR.addRule(RelativeLayout.LEFT_OF,btn_kanJi.getId());
+        tabGroup.addView(btn_kaiWa, btn_kaiWaPR);
+
+        Button btn_grammar = new Button(this);
+        btn_grammar.setText(getResources().getString(R.string.txt_nguphap));
+        btn_grammar.setId(312);
+
+        btn_grammar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainContent.removeAllViews();
+                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "4"};
+                genView(MainContent, "grammar", sTerm);
+            }
+        });
+
+        RelativeLayout.LayoutParams btn_grammarPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn_grammarPR.addRule(RelativeLayout.LEFT_OF, btn_kaiWa.getId());
+        tabGroup.addView(btn_grammar, btn_grammarPR);
+
+        Button btn_newWords = new Button(this);
+        btn_newWords.setText(getResources().getString(R.string.txt_tuvung));
+        btn_newWords.setId(311);
+
+        btn_newWords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainContent.removeAllViews();
+                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "1"};
+                genView(MainContent, "new_word", sTerm);
+            }
+        });
+
+        RelativeLayout.LayoutParams btn_newWordsPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        btn_newWordsPR.addRule(RelativeLayout.LEFT_OF, btn_grammar.getId());
+        tabGroup.addView(btn_newWords,btn_newWordsPR);
+
+        switch (Utils.TAB_OF_LESSON){
+            case 0:
+                btn_newWords.setEnabled(false);
+                btn_newWords.setBackgroundColor(getResources().getColor(R.color.Azure));
+                break;
+            case 1:
+                btn_grammar.setEnabled(false);
+                btn_grammar.setBackgroundColor(getResources().getColor(R.color.Azure));
+                break;
+            case 2:
+                btn_kaiWa.setEnabled(false);
+                btn_kaiWa.setBackgroundColor(getResources().getColor(R.color.Azure));
+                break;
+            case 3:
+                btn_kanJi.setEnabled(false);
+                btn_kanJi.setBackgroundColor(getResources().getColor(R.color.Azure));
+                break;
+            default:
+                break;
+        }
+        MainContent.addView(tabGroup,tabGroupParam);
+
+    }
 
     public void genView(final RelativeLayout MainContent ,String screenName, String[]   args){
         initDb();
@@ -356,6 +612,7 @@ public class AppModel extends Common {
             case "new_word":
                 Utils.TOP_NAVIGATION_TITLE = getResources().getString(R.string.txt_tuvung);
                 Utils.LIST_TYPE = 1;
+                Utils.TAB_OF_LESSON = 0;
                 new SQLBackgroundTask_GetData().execute(args);
                 break;
 
@@ -373,12 +630,24 @@ public class AppModel extends Common {
                 break;
 
             case "grammar":
+                Utils.TOP_NAVIGATION_TITLE = getResources().getString(R.string.txt_nguphap);
+                Utils.TAB_OF_LESSON = 1;
+                Utils.LIST_TYPE = 4;
+                new SQLBackgroundTask_GetData().execute(args);
                 break;
 
             case "kanJi":
+                Utils.TAB_OF_LESSON = 3;
+                Utils.LIST_TYPE = 3;
+                Utils.TOP_NAVIGATION_TITLE = getResources().getString(R.string.txt_kanji);
+                new SQLBackgroundTask_GetData().execute(args);
                 break;
 
             case "kaiWa":
+                Utils.TAB_OF_LESSON = 2;
+                Utils.LIST_TYPE = 6;
+                Utils.TOP_NAVIGATION_TITLE = getResources().getString(R.string.txt_kaiwa);
+                new SQLBackgroundTask_GetData().execute(args);
                 break;
 
             default:
@@ -408,17 +677,6 @@ public class AppModel extends Common {
             return result;
         }
 
-
-
-        /*
-        * Giá trị của biến LIST_TYPE
-        * - List từ mới, 1
-        * - List các bài học tương ứng với mỗi trình độ, 2
-        * - List kanji của mỗi bài, 3
-        * - List ngữ pháp trong 1 bài, 4
-        * - List chữ cái trong bảng chữ cái, 5
-        *
-        * */
         @Override
         protected void onPostExecute(Cursor result){
             RelativeLayout MainContent = (RelativeLayout) findViewById(Utils.MAINCONTENT_LAYOUT_ID);
@@ -430,11 +688,16 @@ public class AppModel extends Common {
                     buildTheListLesson(result, MainContent);
                     break;
                 case 3:
+                    buildTheListKanji(result, MainContent);
                     break;
                 case 4:
+                    buildTheListGramar(result, MainContent);
                     break;
                 case 5:
                     buildTheListChars(result, MainContent);
+                    break;
+                case 6:
+                    buildTheListKaiwa(result, MainContent);
                     break;
                 default:
                     break;

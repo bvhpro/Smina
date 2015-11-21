@@ -136,19 +136,20 @@ class SminaDbHelper extends SQLiteOpenHelper {
     }
 
     /*
-    * Các màn hình muốn getData:
+    * Các màn hình muốn getData, giá trị của scrID:
     * - list từ mới của 1 bài học cụ thể, 1
     * - list bài học ở 1 trình độ cụ thể, 2
     * - list từ mới yêu thích, 3
     * - list ngữ pháp trong 1 bài cụ thể, 4
     * - list chữ cái, 5
     * - list từ mới trong màn hình tìm kiếm, 6
-    *
+    * - list kanji trong 1 bài học cụ thể, 7
+    * - list kaiwa trong 1 bài học cụ thể, 8
     * */
     public Cursor getData(String keyword, int ID, int scrID){
         Cursor res = null;
         try{
-            String sql = "select * from posts where 1 = 1 ";
+            String sql = "select * from posts where active = 1 ";
             switch (scrID){
                 case 1:
                     sql += " and type = 'w' and lesson_ID = " + ID;
@@ -167,6 +168,12 @@ class SminaDbHelper extends SQLiteOpenHelper {
                     break;
                 case 6:
                     sql += " and type = 'w' and txt_title like '%"+ keyword +"%' or txt_hira_kun like '%"+ keyword +"%' or txt_kata_on like '%"+ keyword +"%' ";
+                    break;
+                case 7:
+                    sql += " and type = 'kj' and lesson_ID = " + ID;
+                    break;
+                case 8:
+                    sql += " and type = 'kw' and lesson_ID = " + ID;
                     break;
                 default:
                     break;
