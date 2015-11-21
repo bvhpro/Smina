@@ -18,6 +18,7 @@
     <dimen name="Grid_item_padding_right">6dp</dimen>
     <dimen name="Grid_item_padding_top">6dp</dimen>
     <dimen name="Grid_item_padding_bottom">6dp</dimen>
-
+    <dimen name="List_item_margin_bottom">6dp</dimen>
+    <dimen name="List_item_margin_top">6dp</dimen>
 
 </resources>

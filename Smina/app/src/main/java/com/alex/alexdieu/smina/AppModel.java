@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -57,22 +59,61 @@ public class AppModel extends Common {
         try{
             if(data.moveToFirst()){
                 do {
+                    RelativeLayout row = new RelativeLayout(this);
+                    row.setBackgroundColor(getResources().getColor(R.color.AntiqueWhite));
+                    LinearLayout.LayoutParams rowParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    //row.setPadding(10,20,10,20);
+
                     TextView tv = new TextView(this);
                     final String audio_name = data.getString(3);
-                    tv.setText(data.getString(4));
+                    tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
                     tv.setId(data.getInt(0));
+                    tv.setLineSpacing((float) 0, (float) 1.50);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             new PlaySoundBackgroundTask().execute("audio/" + audio_name + ".mp3");
                         }
                     });
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(10,10,10,0);
-                    tv.setPadding(10,10,10,10);
-                    tv.setBackgroundColor(Color.LTGRAY);
-                    ContentOfList.addView(tv, lp);
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.addRule(RelativeLayout.ALIGN_LEFT);
+                    lp.addRule(RelativeLayout.CENTER_VERTICAL);
+                    tv.setPadding(10, 10, 10, 10);
+                    tv.setBackgroundColor(getResources().getColor(R.color.Lavender));
+                    row.addView(tv, lp);
                     lp = null;
+
+                    Button addNoteBtn = new Button(this);
+                    addNoteBtn.setText("Add Note");
+                    addNoteBtn.setId(11111);
+                    addNoteBtn.setPadding(10,0,10,0);
+                    RelativeLayout.LayoutParams addNoteBtnParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    addNoteBtn.setBackgroundColor(getResources().getColor(R.color.AliceBlue));
+                    addNoteBtnParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    addNoteBtnParam.addRule(RelativeLayout.CENTER_VERTICAL);
+                    addNoteBtnParam.setMargins(0,0,10,0);
+                    row.addView(addNoteBtn, addNoteBtnParam);
+
+                    Button addFovourBtn = new Button(this);
+                    addFovourBtn.setText("Add");
+                    RelativeLayout.LayoutParams btnParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    addFovourBtn.setBackgroundColor(getResources().getColor(R.color.AliceBlue));
+                    btnParam.addRule(RelativeLayout.LEFT_OF, addNoteBtn.getId());
+                    btnParam.addRule(RelativeLayout.CENTER_VERTICAL);
+                    btnParam.setMargins(0,0,10,0);
+                    row.addView(addFovourBtn, btnParam);
+
+                    ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
+                    Paint paint = rectShapeDrawable.getPaint();
+                    paint.setColor(Color.GRAY);
+                    paint.setStyle(Paint.Style.STROKE);
+                    paint.setStrokeWidth(2); // you can change the value of 5
+                    row.setBackgroundDrawable(rectShapeDrawable);
+
+                    rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
+                    ContentOfList.addView(row,rowParam);
+                    rowParam = null;
                 }
                 while (data.moveToNext());
 
