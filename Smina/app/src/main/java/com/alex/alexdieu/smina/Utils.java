@@ -33,4 +33,12 @@ public final class Utils {
     * Khi click chọn bài học, biến này sẽ lưu lại giá trị ID của bài học đó
     * */
     protected static int LESSON_NUMBER_ID = 0;
+
+    /*
+    * Lưu lại các thông tin khi gọi hàm genView
+    * -
+    *
+    * */
+    protected static String genView_screenName;
+    protected static String[] genView_args;
 }

@@ -121,18 +121,46 @@ class SminaDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor getDataDo(String sqlQuery){
+    public Cursor goDoSQL(String sqlQuery,int mode){
         Cursor res = null;
         Log.v("Cau truy van: ",sqlQuery);
         try {
-            SQLiteDatabase db = this.getReadableDatabase();
-            res = db.rawQuery(sqlQuery, null);
-            return res;
+            if(mode == 0) {
+                SQLiteDatabase db = this.getReadableDatabase();
+                res = db.rawQuery(sqlQuery, null);
+            }
+            else if(mode == 1){
+                SQLiteDatabase db = this.getWritableDatabase();
+                db.execSQL(sqlQuery);
+            }
         }
         catch (SQLiteException e){
-
         }
         return res;
+    }
+
+    public Boolean updateData(String whatToDo,String IDObj,String strValue){
+        Boolean result = true;
+        try{
+            String sql = "UPDATE posts ";
+            switch (whatToDo.trim()){
+                case "1": // thay doi trang thai yeu thich tu moi
+                    sql += " SET is_favour  = " + Integer.valueOf(strValue.trim());
+                    sql += " WHERE ID       = " + Integer.valueOf(IDObj.trim());
+                    break;
+                case "2": // cap nhat note cho tu moi
+                    sql += " SET txt_note   = "+ strValue.trim();
+                    sql += " WHERE ID       = " + Integer.valueOf(IDObj.trim());
+                    break;
+                default:
+                    break;
+            }
+            goDoSQL(sql, 1);
+        }
+        catch (Exception e){
+            result = false;
+        }
+        return result;
     }
 
     /*
@@ -181,8 +209,8 @@ class SminaDbHelper extends SQLiteOpenHelper {
 
             sql += " order by sort_order ASC ";
 
-            res =  getDataDo(sql);
-            Log.v("So ban ghi lay ra dc: ",String.valueOf(numberOfRows("w")));
+            res =  goDoSQL(sql,0);
+            //Log.v("So ban ghi lay ra dc: ",String.valueOf(numberOfRows("w")));
         }
         catch (SQLiteException e){
             //Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_LONG);

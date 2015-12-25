@@ -23,6 +23,8 @@
 
     <!-->từ yêu thích<-->
     <string name="txt_word_favour">Từ yêu thích</string>
+    <string name="btn_txt_add_favour">Đánh dấu</string>
+    <string name="btn_txt_add_note">Ghi chú</string>
 
     <!-->ngữ pháp<-->
     <!-->kaiwa<-->
@@ -46,7 +48,7 @@
 
     <string name="txt_clear_screen">Clear Screen</string>
 
-    <string name="txt_btn_menu">Menu 1</string>
+    <string name="txt_btn_menu">Menu</string>
 
     <!--string name=""></string>
 

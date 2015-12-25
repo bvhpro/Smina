@@ -10,6 +10,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -50,9 +51,11 @@ public class AppModel extends Common {
         }
     }
 
-    public void buildTheListRowWord(final Cursor data, RelativeLayout MainContent){
+    public void buildTheListRowWord(final Cursor data, final RelativeLayout MainContent){
+        // add tab control
         addTabOfLesson(MainContent);
 
+        // add content of list to Parent_of_ContentOfList
         RelativeLayout Parent_of_ContentOfList = new RelativeLayout(this);
         RelativeLayout.LayoutParams Parent_of_ContentOfList_Pr = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         Parent_of_ContentOfList_Pr.addRule(RelativeLayout.BELOW,Utils.TAB_OF_LESSON_ID);
@@ -60,6 +63,7 @@ public class AppModel extends Common {
         LinearLayout ContentOfList = new LinearLayout(this);
         LinearLayout.LayoutParams lop = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ContentOfList.setOrientation(LinearLayout.VERTICAL);
+
         ContentOfList.setPadding(10, 10, 10, 10);
 
         try{
@@ -71,6 +75,9 @@ public class AppModel extends Common {
 
                     TextView tv = new TextView(this);
                     final String audio_name = data.getString(3);
+                    final int ID = data.getInt(0);
+                    final int isFavour = data.getInt(11);
+
                     tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
                     tv.setLineSpacing((float) 0, (float) 1.50);
                     tv.setOnClickListener(new View.OnClickListener() {
@@ -88,33 +95,39 @@ public class AppModel extends Common {
                     lp = null;
 
                     Button addNoteBtn = new Button(this);
-                    addNoteBtn.setText("Add Note");
-                    addNoteBtn.setId(11111);
+                    addNoteBtn.setText(getResources().getString(R.string.btn_txt_add_note));
+                    addNoteBtn.setId(ID);
                     addNoteBtn.setPadding(10, 0, 10, 0);
                     RelativeLayout.LayoutParams addNoteBtnParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     addNoteBtn.setBackgroundColor(getResources().getColor(R.color.AliceBlue));
                     addNoteBtnParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     addNoteBtnParam.addRule(RelativeLayout.CENTER_VERTICAL);
-                    addNoteBtnParam.setMargins(0,0,10,0);
+                    addNoteBtnParam.setMargins(0, 0, 10, 0);
+                    addNoteBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //new SQLBackgroundTask_UpdateData().execute();
+                        }
+                    });
                     row.addView(addNoteBtn, addNoteBtnParam);
 
                     Button addFovourBtn = new Button(this);
-                    addFovourBtn.setText("Add");
+                    addFovourBtn.setText(getResources().getString(R.string.btn_txt_add_favour));
                     RelativeLayout.LayoutParams btnParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     addFovourBtn.setBackgroundColor(getResources().getColor(R.color.AliceBlue));
                     btnParam.addRule(RelativeLayout.LEFT_OF, addNoteBtn.getId());
                     btnParam.addRule(RelativeLayout.CENTER_VERTICAL);
                     btnParam.setMargins(0, 0, 10, 0);
+                    addFovourBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addWordToFavour(ID,(isFavour == 0)?1:0);
+                            genView(MainContent,Utils.genView_screenName,Utils.genView_args);
+                        }
+                    });
                     row.addView(addFovourBtn, btnParam);
 
-                   /* ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
-                    Paint paint = rectShapeDrawable.getPaint();
-                    paint.setColor(Color.GRAY);
-                    paint.setStyle(Paint.Style.STROKE);
-                    paint.setStrokeWidth(2); // you can change the value of 5
-                    row.setBackgroundDrawable(rectShapeDrawable);*/
-
-                    rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
+                    rowParam.setMargins(10, 10, 10, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
                     ContentOfList.addView(row,rowParam);
                     rowParam = null;
                 }
@@ -148,23 +161,30 @@ public class AppModel extends Common {
                     row.setBackgroundColor(getResources().getColor(R.color.AntiqueWhite));
                     RelativeLayout.LayoutParams rowParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                    TextView tv = new TextView(this);
-                    final String audio_name = data.getString(3);
-                    tv.setText(data.getString(5) + System.getProperty("line.separator") + data.getString(7) + System.getProperty("line.separator") + data.getString(4));
-                    tv.setLineSpacing((float) 0, (float) 1.50);
-                    tv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new PlaySoundBackgroundTask().execute("audio/" + audio_name + ".mp3");
-                        }
-                    });
+                    TextView title = new TextView(this);
+                    title.setId(data.getInt(0));
+                    title.setText(data.getString(4) + System.getProperty("line.separator"));
+                    title.setLineSpacing((float) 0, (float) 1.50);
+
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     lp.addRule(RelativeLayout.ALIGN_LEFT);
-                    lp.addRule(RelativeLayout.CENTER_VERTICAL);
-                    tv.setPadding(10, 10, 10, 10);
-                    tv.setBackgroundColor(getResources().getColor(R.color.Lavender));
-                    row.addView(tv, lp);
-                    lp = null;
+
+                    title.setPadding(10, 10, 10, 10);
+                    title.setBackgroundColor(getResources().getColor(R.color.Lavender));
+                    row.addView(title, lp);
+
+                    TextView content = new TextView(this);
+                    content.setText(Html.fromHtml(data.getString(8) + System.getProperty("line.separator")));
+                    content.setLineSpacing((float) 0, (float) 1.50);
+
+                    RelativeLayout.LayoutParams contentPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    contentPR.addRule(RelativeLayout.BELOW,title.getId());
+                    contentPR.setMargins(0, 0, 0, 10);
+                    content.setPadding(10, 10, 10, 10);
+                    content.setBackgroundColor(getResources().getColor(R.color.Lavender));
+                    row.addView(content, contentPR);
+
+                    contentPR = null;
 
                     rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
                     ContentOfList.addView(row,rowParam);
@@ -270,7 +290,7 @@ public class AppModel extends Common {
                     row.addView(tv, lp);
                     lp = null;
 
-                    rowParam.setMargins(0, 0, 0, (int)getResources().getDimension(R.dimen.List_item_margin_bottom));
+                    rowParam.setMargins(0, 0, 0, (int) getResources().getDimension(R.dimen.List_item_margin_bottom));
                     ContentOfList.addView(row,rowParam);
                     rowParam = null;
                 }
@@ -341,10 +361,15 @@ public class AppModel extends Common {
 
         try{
             if(data.moveToFirst()){
+                int minWidthCell = (int)(MainContent.getWidth()
+                                            - (getResources().getDimension(R.dimen.Grid_item_margin_left) * 6)
+                                            - (getResources().getDimension(R.dimen.Grid_item_margin_right) * 6)
+                                        ) / 5;
                 do {
                     TextView tv = new TextView(this);
                     tv.setTextSize(30);
                     tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    tv.setGravity(Gravity.CENTER);
                     tv.setText(data.getString(4));
                     final String audio_name = data.getString(3);
                     tv.setOnClickListener(new View.OnClickListener() {
@@ -355,7 +380,6 @@ public class AppModel extends Common {
                             // create popup windows
 
 
-
                             // end create popup windows
                         }
                     });
@@ -363,7 +387,7 @@ public class AppModel extends Common {
                     lp.setMargins(Math.round(getResources().getDimension(R.dimen.Grid_item_margin_left)), Math.round(getResources().getDimension(R.dimen.Grid_item_margin_top)), Math.round(getResources().getDimension(R.dimen.Grid_item_margin_right)), Math.round(getResources().getDimension(R.dimen.Grid_item_margin_bottom)));
                     tv.setPadding(Math.round(getResources().getDimension(R.dimen.Grid_item_padding_left)), Math.round(getResources().getDimension(R.dimen.Grid_item_padding_top)), Math.round(getResources().getDimension(R.dimen.Grid_item_padding_right)), Math.round(getResources().getDimension(R.dimen.Grid_item_padding_bottom)));
                     tv.setBackgroundColor(Color.LTGRAY);
-                    tv.setMinimumWidth((int) MainContent.getWidth() / 5);
+                    tv.setMinimumWidth(minWidthCell);
 
                     ContentOfList.addView(tv, lp);
                     lp = null;
@@ -380,106 +404,111 @@ public class AppModel extends Common {
     }
 
     public void addTabOfLesson(final RelativeLayout MainContent){
-        RelativeLayout tabGroup = new RelativeLayout(this);
-        tabGroup.setId(Utils.TAB_OF_LESSON_ID);
 
-        RelativeLayout.LayoutParams tabGroupParam = new  RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tabGroupParam.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+        if((RelativeLayout)findViewById(Utils.TAB_OF_LESSON_ID) == null) {
 
-        Button btn_kanJi = new Button(this);
-        btn_kanJi.setText(getResources().getString(R.string.txt_kanji));
-        btn_kanJi.setId(314);
+            RelativeLayout tabGroup = new RelativeLayout(this);
+            tabGroup.setId(Utils.TAB_OF_LESSON_ID);
 
-        btn_kanJi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainContent.removeAllViews();
-                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "7"};
-                genView(MainContent, "kanJi", sTerm);
+            RelativeLayout.LayoutParams tabGroupParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            tabGroupParam.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+
+            Button btn_kanJi = new Button(this);
+            btn_kanJi.setText(getResources().getString(R.string.txt_kanji));
+            btn_kanJi.setId(314);
+
+            btn_kanJi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainContent.removeAllViews();
+                    String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "7"};
+                    genView(MainContent, "kanJi", sTerm);
+                }
+            });
+            RelativeLayout.LayoutParams btn_kanJiPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            btn_kanJiPR.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            tabGroup.addView(btn_kanJi, btn_kanJiPR);
+
+            Button btn_kaiWa = new Button(this);
+            btn_kaiWa.setText(getResources().getString(R.string.txt_kaiwa));
+            btn_kaiWa.setId(313);
+
+            btn_kaiWa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainContent.removeAllViews();
+                    String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "8"};
+                    genView(MainContent, "kaiWa", sTerm);
+                }
+            });
+
+            RelativeLayout.LayoutParams btn_kaiWaPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            btn_kaiWaPR.addRule(RelativeLayout.LEFT_OF, btn_kanJi.getId());
+            tabGroup.addView(btn_kaiWa, btn_kaiWaPR);
+
+            Button btn_grammar = new Button(this);
+            btn_grammar.setText(getResources().getString(R.string.txt_nguphap));
+            btn_grammar.setId(312);
+
+            btn_grammar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainContent.removeAllViews();
+                    String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "4"};
+                    genView(MainContent, "grammar", sTerm);
+                }
+            });
+
+            RelativeLayout.LayoutParams btn_grammarPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            btn_grammarPR.addRule(RelativeLayout.LEFT_OF, btn_kaiWa.getId());
+            tabGroup.addView(btn_grammar, btn_grammarPR);
+
+            Button btn_newWords = new Button(this);
+            btn_newWords.setText(getResources().getString(R.string.txt_tuvung));
+            btn_newWords.setId(311);
+
+            btn_newWords.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainContent.removeAllViews();
+                    String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "1"};
+                    genView(MainContent, "new_word", sTerm);
+                }
+            });
+
+            RelativeLayout.LayoutParams btn_newWordsPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            btn_newWordsPR.addRule(RelativeLayout.LEFT_OF, btn_grammar.getId());
+            tabGroup.addView(btn_newWords, btn_newWordsPR);
+
+            switch (Utils.TAB_OF_LESSON) {
+                case 0:
+                    btn_newWords.setEnabled(false);
+                    btn_newWords.setBackgroundColor(getResources().getColor(R.color.Azure));
+                    break;
+                case 1:
+                    btn_grammar.setEnabled(false);
+                    btn_grammar.setBackgroundColor(getResources().getColor(R.color.Azure));
+                    break;
+                case 2:
+                    btn_kaiWa.setEnabled(false);
+                    btn_kaiWa.setBackgroundColor(getResources().getColor(R.color.Azure));
+                    break;
+                case 3:
+                    btn_kanJi.setEnabled(false);
+                    btn_kanJi.setBackgroundColor(getResources().getColor(R.color.Azure));
+                    break;
+                default:
+                    break;
             }
-        });
-        RelativeLayout.LayoutParams btn_kanJiPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        btn_kanJiPR.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        tabGroup.addView(btn_kanJi, btn_kanJiPR);
-
-        Button btn_kaiWa = new Button(this);
-        btn_kaiWa.setText(getResources().getString(R.string.txt_kaiwa));
-        btn_kaiWa.setId(313);
-
-        btn_kaiWa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainContent.removeAllViews();
-                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "8"};
-                genView(MainContent, "kaiWa", sTerm);
-            }
-        });
-
-        RelativeLayout.LayoutParams btn_kaiWaPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        btn_kaiWaPR.addRule(RelativeLayout.LEFT_OF,btn_kanJi.getId());
-        tabGroup.addView(btn_kaiWa, btn_kaiWaPR);
-
-        Button btn_grammar = new Button(this);
-        btn_grammar.setText(getResources().getString(R.string.txt_nguphap));
-        btn_grammar.setId(312);
-
-        btn_grammar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainContent.removeAllViews();
-                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "4"};
-                genView(MainContent, "grammar", sTerm);
-            }
-        });
-
-        RelativeLayout.LayoutParams btn_grammarPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        btn_grammarPR.addRule(RelativeLayout.LEFT_OF, btn_kaiWa.getId());
-        tabGroup.addView(btn_grammar, btn_grammarPR);
-
-        Button btn_newWords = new Button(this);
-        btn_newWords.setText(getResources().getString(R.string.txt_tuvung));
-        btn_newWords.setId(311);
-
-        btn_newWords.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainContent.removeAllViews();
-                String[] sTerm = {"", "0" + Utils.LESSON_NUMBER_ID, "1"};
-                genView(MainContent, "new_word", sTerm);
-            }
-        });
-
-        RelativeLayout.LayoutParams btn_newWordsPR = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        btn_newWordsPR.addRule(RelativeLayout.LEFT_OF, btn_grammar.getId());
-        tabGroup.addView(btn_newWords,btn_newWordsPR);
-
-        switch (Utils.TAB_OF_LESSON){
-            case 0:
-                btn_newWords.setEnabled(false);
-                btn_newWords.setBackgroundColor(getResources().getColor(R.color.Azure));
-                break;
-            case 1:
-                btn_grammar.setEnabled(false);
-                btn_grammar.setBackgroundColor(getResources().getColor(R.color.Azure));
-                break;
-            case 2:
-                btn_kaiWa.setEnabled(false);
-                btn_kaiWa.setBackgroundColor(getResources().getColor(R.color.Azure));
-                break;
-            case 3:
-                btn_kanJi.setEnabled(false);
-                btn_kanJi.setBackgroundColor(getResources().getColor(R.color.Azure));
-                break;
-            default:
-                break;
+            MainContent.addView(tabGroup, tabGroupParam);
         }
-        MainContent.addView(tabGroup,tabGroupParam);
-
     }
 
     public void genView(final RelativeLayout MainContent ,String screenName, String[]   args){
         initDb();
-        Utils.TOP_NAVIGATION_TITLE = getResources().getString(R.string.app_name);
+        Utils.TOP_NAVIGATION_TITLE  = getResources().getString(R.string.app_name);
+        Utils.genView_screenName    = screenName;
+        Utils.genView_args          = args;
 
         switch (screenName){
             case "home":
@@ -660,6 +689,39 @@ public class AppModel extends Common {
 
     }
 
+    public void addWordToFavour(int ID, int value){
+        try{
+            String[] args = {"1","0" + ID,"0" + value};
+            new SQLBackgroundTask_UpdateData().execute(args);
+        }
+        catch (Exception e){
+            Log.v("Loi ", e.toString());
+        }
+    }
+
+    /*
+    * Có 2 tham số truyền vào
+    * - params[0] là đối tượng xử lý:
+    *   + 1. thay đổi trạng thái từ yêu thích
+    *   + 2. cập nhật note cho từ
+    * - params[1] là ID của bản ghi
+    * - params[2] là giá trị dùng để cập nhật cho bản ghi
+    * */
+    public class SQLBackgroundTask_UpdateData extends AsyncTask<String, Process, Void> {
+        protected void onPreExecute(){
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                dbHelper.updateData(params[0],params[1],params[2]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.v("Loi: ","");
+            }
+            return null;
+        }
+    }
 
     public class SQLBackgroundTask_GetData extends AsyncTask<String,Process,Cursor> {
         protected void onPreExecute(){
@@ -704,7 +766,6 @@ public class AppModel extends Common {
             }
             dbHelper.close();
         }
-
     }
 
 
